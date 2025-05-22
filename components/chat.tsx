@@ -1,6 +1,10 @@
 "use client"
 
+import axios from "axios"
 import type React from "react"
+
+const apiBase = process.env.NEXT_PUBLIC_API_BASE;
+
 
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -245,23 +249,40 @@ export function Chat({ user, onLogin, activeChat }: ChatProps) {
       setIsTyping(false)
 
       // Example response - in a real app, this would come from your API
-      const isHtml = Math.random() > 0.5 // Randomly decide if response is HTML or plain text
-      const responseContent = isHtml
-        ? `<div style="color: blue; font-weight: bold;">This is an HTML response</div>
-           <ul>
-             <li>Item 1</li>
-             <li>Item 2</li>
-             <li>Item 3</li>
-           </ul>`
-        : `This is a response to: "${input}"`
+      //const isHtml = Math.random() > 0.5 // Randomly decide if response is HTML or plain text
+      //const responseContent = isHtml
+      //  ? `<div style="color: blue; font-weight: bold;">This is an HTML response</div>
+       //    <ul>
+      //       <li>Item 1</li>
+      //       <li>Item 2</li>
+      //       <li>Item 3</li>
+      //    </ul>`
+      //  : `This is a response to: "${input}"`
+
+      //const botMessage: MessageType = {
+      //  id: (Date.now() + 1).toString(),
+      //  content: responseContent,
+      //  isUser: false,
+      //  isHtml: isHtml,
+      //  timestamp: new Date(),
+      //}
+
+      const response = await axios.post(`${apiBase}/querying/model_response`, {
+        user_query: input,
+        org_id: [],
+        physician_id: "",
+        tag_name: "",
+        chat_id: currentChat?.id || "frontend-test-001"
+      });
 
       const botMessage: MessageType = {
         id: (Date.now() + 1).toString(),
-        content: responseContent,
+        content: response.data.response || "No answer received.",
         isUser: false,
-        isHtml: isHtml,
+        isHtml: false, // Change to true if response includes HTML
         timestamp: new Date(),
       }
+
 
       setMessages((prev) => [...prev, botMessage])
 
