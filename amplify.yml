@@ -3,14 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm install  # Using npm to install dependencies
+        - npm install  # Install dependencies
     build:
       commands:
-        - npm run build  # Replace this with your actual build command
+        - npm run build  # Build the Next.js app
   artifacts:
-    baseDirectory: ./  # Current directory, or you could use '.' for root directory
+    baseDirectory: .next  # This is the output directory for Next.js
     files:
-      - '**/*'  # Include all files in the root directory
+      - '**/*'  # Include all files in the .next directory
   cache:
     paths:
-      - node_modules/**/*  # Cache node_modules to speed up builds
+      - node_modules/**/*  # Cache node_modules to speed up future builds
